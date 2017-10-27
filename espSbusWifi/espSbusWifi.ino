@@ -43,14 +43,6 @@ unsigned int failsafeCounter = 0;
 byte longFailsafeTriggered = 0;
 unsigned int noPacketCounter = 0;
 
-
-
-
-
-
-
-
-
 //////////////////////////////////////
 unsigned int SBUS_Channel_Data[18];
 byte SBUS_Current_Channel = 0;
@@ -127,10 +119,7 @@ void loop()
   //delay(7);
 }
 
-
 ///////////////////////////////////////////////////////////////////////////////////////////
-
-//'Udp' declared in Define file
 
 void udp_setup()
 {
@@ -231,8 +220,6 @@ void command_decoder(String input, byte portNumber)
   
     //Triggers failsafe if packets recieved are empty (app is closed or phone locked)
     
-  
-    
       yawInput = inputBuffer[0];
       pitchInput = inputBuffer[1];
       rollInput = inputBuffer[2];
@@ -242,7 +229,6 @@ void command_decoder(String input, byte portNumber)
       Serial.println(rollInput);
       Serial.println(thrInput);
 
-      
   }
   
   else
@@ -286,11 +272,8 @@ void command_decoder(String input, byte portNumber)
 #endif
     
     String pidTypeStr(pidType);  //Converting to string format
-
-    
-  
-   
   }
+ //==================IMPORTANT==================
   rc_compute();
 }
 
