@@ -122,17 +122,17 @@ def doauto():
 
 def get_serial_data_home():
     while True:
-        s=[]
-        s.append(ser.readline())
+        ser_data=[]
+        ser_data.append(ser.readline())
         #print s
-        if s[0]=="":
+        if ser_data[0]=="":
             print "BULLSHIT"
-        elif s[0]=='INVALID\n':
+        elif ser_data[0]=='INVALID\n':
            print "exit"
         else:
             x=[]
         
-            for line in s:
+            for line in ser_data:
                 words=line.split('\n')
                 x.append(words[0])
             y=[]
@@ -153,17 +153,19 @@ def get_serial_data_home():
             return home_lat,home_lon
 def get_serial_data(home_lat,home_lon):
     while True:
-        s=[]
-        s.append(ser.readline())
+        ser_data=[]
+        ser_data.append(ser.readline())
         #print s
-        if s[0]=="":
+        if ser_data[0]=="":
             print "BULLSHIT"
-        elif s[0]=='INVALID\n':
+        elif ser_data[0]=='INVALID\n':
            print "exit"
+        elif ser_data[0]=="LAND":
+            land=1
         else:
             x=[]
         
-            for line in s:
+            for line in ser_data:
                 words=line.split('\n')
                 x.append(words[0])
             y=[]
@@ -183,7 +185,7 @@ def arm_and_takeoff(aTargetAltitude):
     """
     Arms vehicle and fly to aTargetAltitude.
     """
-    ########################################################
+    ########################################################FOR SIMULATION####################
     with open("b.txt", "r") as f:
         data=f.readlines()
 
@@ -199,16 +201,19 @@ def arm_and_takeoff(aTargetAltitude):
         vehicle.parameters[words[0]]=float(words[1])
         print vehicle.parameters[words[0]]
     
-    ########################################################
+    ############################################################################################
     print "Basic pre-arm checks"
     # Don't let the user try to arm until autopilot is ready
+    ser_data=[]
+    
     while not vehicle.is_armable:
         print " Waiting for vehicle to initialise..."
         time.sleep(1)
 
-
+    while ser_data!="ARM\n":
+        ser_data=ser.readline()
     print "Arming motors"
-    # Copter should arm in GUIDED mode
+    
 
     time.sleep(5)
     vehicle.mode = VehicleMode("MANUAL")
