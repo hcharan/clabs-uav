@@ -161,7 +161,11 @@ def get_serial_data(home_lat,home_lon):
         elif ser_data[0]=='INVALID\n':
            print "exit"
         elif ser_data[0]=="LAND":
-            land=1
+            ret_val=1
+            break
+        elif ser_data[0]=="DISARM\n":
+            ret_val=2
+            break
         else:
             x=[]
         
@@ -179,7 +183,9 @@ def get_serial_data(home_lat,home_lon):
             F.write("0	1	3	16	0.000000	0.000000	0.000000	0.000000	"+home_lat+"\t"+home_lon+"\t100.000000	1\n")
             F.write("1	0	3	16	0.000000	0.000000	0.000000	0.000000	"+y[0]+"\t"+y[1]+"\t100.000000	1\n")
             F.close()
+            ret_val=0
             break
+    return ret_val
 ###################################
 def arm_and_takeoff(aTargetAltitude):
     """
@@ -265,7 +271,9 @@ print 'LOITER'
 vehicle.mode = VehicleMode("LOITER")
 
 while True:
-    get_serial_data(home_lat,home_lon)
+    ret_val=get_serial_data(home_lat,home_lon)
+    if ret_val>0:
+        break
     import_mission_filename = 'loiter.txt'
     no_wp=upload_mission(import_mission_filename)
     vehicle.commands.next=0
@@ -275,22 +283,20 @@ while True:
     print 'LOITER'
     vehicle.mode = VehicleMode("LOITER")
     time.sleep(10)
-inputtt='b'
-while(True):
-    inputtt=raw_input()
-    if inputtt=='d':
-        break
-print 'Return to launch'
-vehicle.mode = VehicleMode("RTL")
+if ret_val==2:
+    vehicle.armed = False
+else:
 
-alt1=10000
-while alt1>500:
-    alt1=alt1-500
-    vehicle.parameters['ALT_HOLD_RTL']=alt1
-    print vehicle.parameters['ALT_HOLD_RTL']
-    vehicle.mode = VehicleMode("MANUAL")
     vehicle.mode = VehicleMode("RTL")
-    time.sleep(5)
+
+    alt1=10000
+    while alt1>500:
+        alt1=alt1-500
+        vehicle.parameters['ALT_HOLD_RTL']=alt1
+        print vehicle.parameters['ALT_HOLD_RTL']
+        vehicle.mode = VehicleMode("MANUAL")
+        vehicle.mode = VehicleMode("RTL")
+        time.sleep(5)
 #Close vehicle object before exiting script
 print "Close vehicle object"
 vehicle.close()
