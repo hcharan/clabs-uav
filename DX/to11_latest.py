@@ -152,11 +152,13 @@ def get_serial_data_home():
             F.close()
             return home_lat,home_lon
 def get_serial_data(home_lat,home_lon):
+    start= time.time()
     while True:
         ser_data=[]
         ser_data.append(ser.readline())
         #print s
         if ser_data[0]=="":
+        	stop= time.time()
             print "BULLSHIT"
         elif ser_data[0]=='INVALID\n':
            print "exit"
@@ -185,6 +187,8 @@ def get_serial_data(home_lat,home_lon):
             F.close()
             ret_val=0
             break
+        if(start-stop>=5):
+        	ret_val=2
     return ret_val
 ###################################
 def arm_and_takeoff(aTargetAltitude):
