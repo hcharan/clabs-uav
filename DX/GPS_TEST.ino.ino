@@ -1,8 +1,5 @@
 #include <TinyGPS++.h>
 #include <SoftwareSerial.h>
-/*This sample sketch demonstrates the normal use of a TinyGPS++ (TinyGPSPlus) object.   
-It requires the use of SoftwareSerial, and aSerial1umes that you have a 9600-baud serial 
-GPS device hooked up on pins 8(rx) and 9(tx).*/
 static const int RXPin = 8, TXPin = 9;
 static const uint32_t GPSBaud = 9600;
 
@@ -21,13 +18,6 @@ void setup()
 {
   Serial.begin(115200);
   Serial1.begin(GPSBaud);
-
-  //Serial.println(F("DeviceExample.ino"));
-  //Serial.println(F("A simple demonstration of TinyGPS++ with an attached GPS module"));
-  //Serial.print(F("Testing TinyGPS++ library v. ")); Serial.println(TinyGPSPlus::libraryVersion());
-  //Serial.println(F("by Mikal Hart"));
-  //Serial.println(F("Edited By www.maxphi.com"));
-  //Serial.println();
 }
 
 void loop()
@@ -78,7 +68,6 @@ void loop()
 
 void displayInfo()
 {
-  //Serial.print(F("Location: ")); 
   if (gps.location.isValid())
   {
     Serial.print(gps.location.lat(), 6);
